@@ -1,35 +1,44 @@
-Role Name
-=========
+OPNsense: Unbound DNS
+=====================
 
-A brief description of the role goes here.
+An ansible role to manage the Unbound DNS server on an opnSense firewall.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role requires the `lxml` python package to be installed on the host system.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+|                Variable                 | Type  |                  Description                  |
+| :-------------------------------------: | :---: | :-------------------------------------------: |
+|        opnsense_unbound_enabled         | bool  |     Enable/Disable the unbound firewall.      |
+|     opnsense_unbound_register_dhcp      | bool  |  Enable/Disable registration of dhcp leases.  |
+| opnsense_unbound_register_static_leases | bool  | Enable/Disable registration of static leases. |
+|     opnsense_unbound_dnssec_enabled     | bool  |            Enable/Disable dnssec.             |
+|      opnsense_unbound_flush_cache       | bool  |          Enable/Disable cache flush.          |
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+N/A.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
 ```yaml
-- hosts: all
+- name: Configure the DNS
+  hosts: opnsense
 
   roles:
-    - role: mirceanton.template
+    - role: mirceanton.opnsense_unbound
       vars:
-        foo: bar
+        opnsense_unbound_enabled: true
+        opnsense_unbound_register_dhcp: true
+        opnsense_unbound_register_static_leases: true
+        opnsense_unbound_dnssec_enabled: true
+        opnsense_unbound_flush_cache: true
 ```
 
 License
