@@ -1,0 +1,38 @@
+---
+- name: "Set status to {{ 'enabled' if opnsense_unbound_enabled else 'disabled' }}"
+  community.general.xml:
+    pretty_print: true
+    path: "{{ local_file }}"
+    xpath: "{{ xpath }}/enable"
+    value: "{{ '1' if opnsense_unbound_enabled else '0' }}"
+
+- name: Configure unbound
+  when: opnsense_unbound_enabled
+  block:
+    - name: "Register DHCP Leases"
+      community.general.xml:
+        pretty_print: true
+        path: "{{ local_file }}"
+        xpath: "{{ xpath }}/regdhcp"
+        value: "{{ '1' if opnsense_unbound_register_dhcp else '0' }}"
+
+    - name: "Register DHCP Static Mappings"
+      community.general.xml:
+        pretty_print: true
+        path: "{{ local_file }}"
+        xpath: "{{ xpath }}/regdhcpstatic"
+        value: "{{ '1' if opnsense_unbound_register_static_leases else '0' }}"
+
+    - name: "Enable DNSSEC"
+      community.general.xml:
+        pretty_print: true
+        path: "{{ local_file }}"
+        xpath: "{{ xpath }}/dnssec"
+        value: "{{ '1' if opnsense_unbound_dnssec_enabled else '0' }}"
+
+    - name: "Enable Cache Flush"
+      community.general.xml:
+        pretty_print: true
+        path: "{{ local_file }}"
+        xpath: "{{ xpath }}/cacheflush"
+        value: "{{ '1' if opnsense_unbound_flush_cache else '0' }}"
